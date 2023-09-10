@@ -32,10 +32,8 @@ function connect(event) {
 }
 
 function onConnected() {
-    //subscribe to the public topic
     stompClient.subscribe("/topic/public", onMessageReceived);
 
-    //tell username to the server
     stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: username, type: 'JOIN'}));
     connectingElement.classList.add('hidden');
 }
@@ -46,41 +44,90 @@ function onError() {
 }
 
 
-
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
-    var messageElement = document.createElement('li');
 
+    if (message.type === 'JOIN' || message.type === 'LEAVE') {
+        handleUserEvent(message);
+    } else if (message.type === 'CHAT') {
+        handleChatMessage(message);
+    }
+}
+
+function handleUserEvent(message) {
+    var eventMessage = document.createElement('li');
+    eventMessage.classList.add('event-message');
     if(message.type === 'JOIN'){
-        messageElement.classList.add('event-message');
-        message.content = message.sender + ' has joined!';
-    }else if(message.type === 'LEAVE'){
-        messageElement.classList.add('event-message');
-        message.content = message.sender + ' has left!';
-    }else{
-        messageElement.classList.add('chat-message');
+        message.content = message.sender + ' has joined!'
+    } else {
+        message.content = message.sender + ' has left!'
+    }
+    insertEventsDOM(eventMessage, message);
+}
 
-        var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.sender[0]);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style['background-color'] = getAvatarColor(message.sender);
-        messageElement.appendChild(avatarElement);
+function handleChatMessage(message) {
+    var messageElementContainer = document.createElement('div');
+    var messageElements = document.createElement('li');
+    var textMessageElements = document.createElement('div');
+    textMessageElements.classList.add("message-text-elements");
+
+    if (message.sender === username) {
+        messageElements.classList.add('message-user');
+        messageElementContainer.classList.add('message-user-container')
+        insertMessagesDOM(messageElements, message, messageElementContainer);
+    } else {
+        messageElements.classList.add('message-other-elements');
+        messageElementContainer.classList.add('message-other-container')
+
+        var avatarElement = getAvatarUser(message);
+        messageElements.appendChild(avatarElement);
+        messageElementContainer.appendChild(messageElements);
 
         var usernameElement = document.createElement('span');
+        usernameElement.style['color'] = getAvatarColor(message.sender);
+
         var usernameText = document.createTextNode(message.sender);
         usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
-    }
+        textMessageElements.appendChild(usernameElement);
+        messageElements.appendChild(textMessageElements);
 
+        insertMessagesDOM(null, message, messageElementContainer, textMessageElements);
+    }
+}
+
+function getAvatarUser(message){
+    var avatarElement = document.createElement('i');
+    avatarElement.classList.add('avatar-user')
+    var avatarText = document.createTextNode(message.sender[0]);
+    avatarElement.appendChild(avatarText);
+    avatarElement.style['background-color'] = getAvatarColor(message.sender);
+    return avatarElement;
+}
+
+function insertEventsDOM(messageElement, message){
     var textElement = document.createElement('p');
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
-
     messageElement.appendChild(textElement);
 
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
 }
+
+function insertMessagesDOM(messageElements, message, messageElementContainer, textMessageElements) {
+        var textElement = document.createElement('p');
+        var messageText = document.createTextNode(message.content);
+        textElement.appendChild(messageText);
+        if(messageElements){
+            messageElements.appendChild(textElement);
+            messageElementContainer.appendChild(messageElements)
+        }else if (textMessageElements){
+            textMessageElements.appendChild(textElement);
+        }
+        messageArea.appendChild(messageElementContainer);
+        messageArea.scrollTop = messageArea.scrollHeight;
+}
+
 
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
@@ -95,6 +142,7 @@ function sendMessage(event) {
     }
     event.preventDefault();
 }
+
 
 
 function getAvatarColor(messageSender) {
