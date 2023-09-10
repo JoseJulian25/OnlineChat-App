@@ -118,7 +118,6 @@ button.accent {
 }
 
 #chat-page {
-    position: relative;
     height: 100%;
 }
 
@@ -146,58 +145,21 @@ button.accent {
     padding: 20px;
 }
 
-#chat-page ul li {
-    line-height: 1.5rem;
-    padding: 10px 20px;
-    margin: 0;
-    border-bottom: 1px solid #f4f4f4;
-}
-
-#chat-page ul li p {
-    margin: 0;
-}
-
 #chat-page .event-message{
     width: 100%;
     text-align: center;
-    clear: both;
 }
 
-#chat-page.event-message p {
+.event-message p {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    padding: 0.5rem 0;
     color: #777;
     font-size: 14px;
-    word-wrap: break-word;
-}
-
-#chat-page .chat-message{
-    padding-left: 60px;
-    position: relative;
-}
-
-#chat-page .chat-message i {
-    position: absolute;
-    width: 42px;
-    height: 42px;
-    overflow: hidden;
-    left: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 18px;
-    line-height: 42px;
-    color: #fff;
-    text-align: center;
-    border-radius: 50%;
-    font-style: normal;
-    text-transform: uppercase;
 }
 
 #chat-page .chat-message span {
     color: #333;
     font-weight: 600;
-}
-
-#chat-page .chat-message p {
-    color: #43464b;
 }
 
 #messageForm .input-group input {
@@ -230,6 +192,68 @@ button.accent {
     position: absolute;
     top: 65px;
     width: 100%;
+}
+
+.message-user-container{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.message-other-container{
+    display: flex;
+}
+
+.message-user {
+    display: inline-flex;
+    background-color: #a7c957;
+    padding: 7px 13px;
+    border-radius: 15px;
+    margin: 0.3rem 0;
+}
+
+.message-user p {
+    margin: 0;
+    color:#fff;
+}
+
+.message-text-elements p {
+    margin: 0;
+    color: #3d3b3c;
+    font-size: 15px;
+}
+
+.message-text-elements span {
+    font-size: 15px;
+}
+
+.message-other-elements {
+    display: inline-flex;
+    border: 2px solid #FFFFFF;
+    background-color: #FFFFFF;
+    padding: 8px;
+    border-radius: 15px;
+    margin: 0.3rem 0;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.avatar-user{
+    width: 42px;
+    height: 42px;
+    vertical-align: middle;
+    font-size: 18px;
+    line-height: 42px;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    font-style: normal;
+    text-transform: uppercase
+}
+
+.message-text-elements{
+    padding: 2px 3.5rem 2px 20px ;
+    background-color: #f4f4f4;
+    border-radius: 28px;
 }
 
 @media screen and (max-width: 730px) {
