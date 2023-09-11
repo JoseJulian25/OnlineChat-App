@@ -1,12 +1,13 @@
 import {handleChatMessage, handleUserEvent} from "./dom.js";
 
-var connectingElement = document.querySelector(".connecting")
-var stompClient = null;
-var username = null;
+const connectingElement = document.querySelector(".connecting")
+let stompClient = null;
+let username = null;
+let userId = null;
 
 function connectWebSocket(userInput){
     username = userInput.value.trim();
-    var socket = new SockJS('/ws');
+    const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected, onError);
@@ -26,7 +27,8 @@ function onError() {
 function sendMessageViaWebSocket(messageInput) {
     const messageContent = messageInput.value.trim();
     if(messageContent && stompClient){
-        var chatMessage = {
+        const chatMessage = {
+            id: userId,
             sender: username,
             content: messageContent,
             type: 'CHAT'
@@ -37,12 +39,13 @@ function sendMessageViaWebSocket(messageInput) {
 }
 
 function onMessageReceived(payload) {
-    var message = JSON.parse(payload.body);
+    const message = JSON.parse(payload.body);
+    if(!userId) userId = message.id;
 
     if (message.type === 'JOIN' || message.type === 'LEAVE') {
         handleUserEvent(message);
     } else if (message.type === 'CHAT') {
-        handleChatMessage(message);
+        handleChatMessage(message, userId);
     }
 }
 

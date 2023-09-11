@@ -1,9 +1,9 @@
-var usernamePage = document.querySelector("#username-page");
-var chatPage = document.querySelector("#chat-page");
-var messageArea = document.querySelector("#messageArea")
-var username = null;
+const usernamePage = document.querySelector("#username-page");
+const chatPage = document.querySelector("#chat-page");
+const messageArea = document.querySelector("#messageArea")
+let username = null;
 
-var colors = [
+const colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
@@ -17,23 +17,25 @@ function showChatPage(){
 }
 
 function handleUserEvent(message){
-    var eventMessage = document.createElement('li');
+    const eventMessage = document.createElement('li');
     eventMessage.classList.add('event-message');
+
     if(message.type === 'JOIN'){
         message.content = message.sender + ' has joined!'
     } else {
         message.content = message.sender + ' has left!'
     }
+
     insertEventIntoDOM(eventMessage, message);
 }
 
-function handleChatMessage(message){
-    var messageElementContainer = document.createElement('div');
-    var messageElements = document.createElement('li');
-    var textMessageElements = document.createElement('div');
+function handleChatMessage(message, userId){
+    const messageElementContainer = document.createElement('div');
+    const messageElements = document.createElement('li');
+    const textMessageElements = document.createElement('div');
     textMessageElements.classList.add("message-text-elements");
 
-    if (message.sender === username) {
+    if (message.id === userId) {
         messageElements.classList.add('message-user');
         messageElementContainer.classList.add('message-user-container')
         insertMessageIntoDOM(messageElements, message, messageElementContainer);
@@ -41,14 +43,14 @@ function handleChatMessage(message){
         messageElements.classList.add('message-other-elements');
         messageElementContainer.classList.add('message-other-container')
 
-        var avatarElement = getAvatarUser(message);
+        const avatarElement = getAvatarUser(message);
         messageElements.appendChild(avatarElement);
         messageElementContainer.appendChild(messageElements);
 
-        var usernameElement = document.createElement('span');
+        const usernameElement = document.createElement('span');
         usernameElement.style['color'] = getAvatarColor(message.sender);
 
-        var usernameText = document.createTextNode(message.sender);
+        const usernameText = document.createTextNode(message.sender);
         usernameElement.appendChild(usernameText);
         textMessageElements.appendChild(usernameElement);
         messageElements.appendChild(textMessageElements);
@@ -58,40 +60,43 @@ function handleChatMessage(message){
 }
 
 function getAvatarUser(message){
-    var avatarElement = document.createElement('i');
+    const avatarElement = document.createElement('i');
     avatarElement.classList.add('avatar-user')
-    var avatarText = document.createTextNode(message.sender[0]);
+
+    const avatarText = document.createTextNode(message.sender[0]);
     avatarElement.appendChild(avatarText);
     avatarElement.style['background-color'] = getAvatarColor(message.sender);
     return avatarElement;
 }
 
 function getAvatarColor(messageSender) {
-    var hash = 0;
-    for (var i = 0; i < messageSender.length; i++){
+    let hash = 0;
+    for (let i = 0; i < messageSender.length; i++){
         hash = 31 * hash + messageSender.charCodeAt(i);
     }
-    var index = Math.abs(hash % colors.length);
+    const index = Math.abs(hash % colors.length);
     return colors[index];
 }
 
 function insertMessageIntoDOM(messageElements, message, messageElementContainer, textMessageElements){
-    var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
+    const textElement = document.createElement('p');
+    const messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
+
     if(messageElements){
         messageElements.appendChild(textElement);
         messageElementContainer.appendChild(messageElements)
     }else if (textMessageElements){
         textMessageElements.appendChild(textElement);
     }
+
     messageArea.appendChild(messageElementContainer);
     messageArea.scrollTop = messageArea.scrollHeight;
 }
 
 function insertEventIntoDOM(eventMessage, message){
-    var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
+    const textElement = document.createElement('p');
+    const messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
     eventMessage.appendChild(textElement);
 

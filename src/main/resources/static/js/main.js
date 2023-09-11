@@ -1,10 +1,10 @@
 import {connectWebSocket, sendMessageViaWebSocket} from './websocket.js';
 import {showChatPage} from "./dom.js";
 
-var usernameForm = document.querySelector("#usernameForm")
-var messageInput = document.querySelector("#message");
-var messageForm = document.querySelector("#messageForm")
-var userInput = document.querySelector("#name");
+const usernameForm = document.querySelector("#usernameForm")
+const messageInput = document.querySelector("#message");
+const messageForm = document.querySelector("#messageForm")
+const userInput = document.querySelector("#name");
 
 function connect(event){
     showChatPage();
