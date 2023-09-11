@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import java.util.UUID;
+
 @Controller
 public class ChatController {
 
@@ -19,7 +21,12 @@ public class ChatController {
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage message, SimpMessageHeaderAccessor headerAccessor){
-        headerAccessor.getSessionAttributes().put("username", message.getSender());
-        return message;
+        String idUser = UUID.randomUUID().toString();
+        ChatMessage messageboxes = new ChatMessage(idUser, message.getContent(), message.getSender(), message.getType());
+
+        headerAccessor.getSessionAttributes().put("id", messageboxes.getId());
+        headerAccessor.getSessionAttributes().put("username", messageboxes.getSender());
+
+        return messageboxes;
     }
 }
