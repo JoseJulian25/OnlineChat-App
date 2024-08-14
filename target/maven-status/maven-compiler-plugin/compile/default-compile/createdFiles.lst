@@ -1,0 +1,7 @@
+com\rd\chatonline\entity\ChatMessage$ChatMessageBuilder.class
+com\rd\chatonline\config\WebSocketConfig.class
+com\rd\chatonline\entity\MessageType.class
+com\rd\chatonline\config\WebSocketEventListener.class
+com\rd\chatonline\controller\ChatController.class
+com\rd\chatonline\entity\ChatMessage.class
+com\rd\chatonline\ChatOnlineApplication.class
