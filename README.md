@@ -26,7 +26,7 @@ cd OnlineChat-App
 ### 2. Build and run the application with Docker
 In the project's root directory, run the following commands:
 ```bash
-docker build chat-online-app .
+docker compose build
 docker compose up
 ```
 
