@@ -4,6 +4,6 @@ services:
   online-chat-app:
     build:
       context: .
-      dockerfile: Dockerfile
+    image: online-chat-app:1.0
     ports:
     - "8585:8585"
