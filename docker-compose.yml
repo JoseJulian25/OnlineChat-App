@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  online-chat-app:
+    build:
+      context: .
+    image: online-chat-app:1.0
+    ports:
+    - "8585:8585"
